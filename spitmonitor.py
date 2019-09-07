@@ -57,6 +57,7 @@ max_samples = 1000000
 minpktlen = 15 * 8   # Minimum number of bits in a packet
 minsamples = 10000   # Minumum number of samples expected
 threshold = 0.020    # Threshold over which we consider a signal to have been detected (0.020 is good for +30dBm, 0.005 is good for 0dBm)
+symbols_average = 0
 invalid_packets = 0
 packet_count = 0
 debug = True
@@ -150,6 +151,7 @@ def midpoint(a):
 
 # convert soft symbols into bits (assuming binary symbols)
 def slice_bits(symbols):
+    global symbols_average
     symbols_average = numpy.average(symbols)
     if debug:
         print "average amplitude: %s" % symbols_average
@@ -312,6 +314,8 @@ def findRotationalFrequency(f):
     return [freq,rpm]
 
 def findFireTemperature(f):
+    global tracking
+
     # Ambient air temperature (Hilbert Transform and amplitude detection)
     g = np.array(f[-128:])
     zmean = np.mean(g)
@@ -402,6 +406,8 @@ def processData():
     datafile.write(str(round(batt,2)))
     datafile.write(",")
     datafile.write(str(round(internal,2)))
+    datafile.write(",")
+    datafile.write(str(round(symbols_average,3)))
     datafile.write("\n")
     datafile.close()
 
