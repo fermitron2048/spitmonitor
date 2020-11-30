@@ -1,2 +1,2 @@
 # spitmonitor
-Monitor temperatures on a rotating spit
+Monitor temperatures on a rotating spit.
